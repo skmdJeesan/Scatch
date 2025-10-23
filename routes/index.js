@@ -50,7 +50,6 @@ router.get('/addtocart/:productid', isloggedin, async (req, res) => {
   }
 });
 
-
 router.get('/removefromcart/:productid', isloggedin, async (req,res) => {
   try {
     const id = req.params.productid;
@@ -69,6 +68,10 @@ router.get('/removefromcart/:productid', isloggedin, async (req,res) => {
     //console.error(err);
     res.status(500).send('Server error');
   }
+})
+
+router.post('/order', isloggedin, (req,res) => {
+  res.send('ordered placed successfully🎉')
 })
 
 module.exports = router
