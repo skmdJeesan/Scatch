@@ -1,8 +1,15 @@
 <%- include('./partials/header') %>
     <% if(success.length>0){ %>
-        <div class="absolute top-2 left-1/2 -translate-x-1/2 px-2 py-1 rounded-md bg-blue-500">
+        <div class="flash absolute top-2 left-1/2 -translate-x-1/2 px-2 py-1 rounded-md bg-blue-500">
             <span class="inline-block mt-1 mb-1 text-white">
                 <%= success %>
+            </span>
+        </div>
+    <% } %>
+    <% if(info.length>0){ %>
+        <div class="flash absolute top-2 left-1/2 -translate-x-1/2 px-2 py-1 rounded-md bg-yellow-500">
+            <span class="inline-block mt-1 mb-1 text-white">
+                <%= info %>
             </span>
         </div>
     <% } %>
