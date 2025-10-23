@@ -7,7 +7,7 @@ const userSchema = mongoose.Schema({
   contact: Number,
   isAdmin: Boolean,
   profilepic: {type: String, default: 'default.png'},
-  cart: {type: Array, default: []},
+  cart: [{type: mongoose.Schema.Types.ObjectId, ref: "product"}],
   orders: {type: Array, default: []}
 })
 
