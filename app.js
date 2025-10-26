@@ -2,7 +2,7 @@ const express =  require('express')
 const app = express()
 
 require('dotenv').config()
-const db = require('./config/mongoose-connection')
+require('./config/mongoose-connection')
 
 const indexRouter = require('./routes/index')
 const ownersRouter = require('./routes/ownersRouter')
@@ -26,7 +26,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   store: MongoStore.create({
-    mongoUrl: config.get('MONGODB_URI'),
+    mongoUrl: `${config.get('MONGODB_URI')}/scatchDb`,
     collectionName: 'sessions'
   }),
   cookie: { maxAge: 1000 * 60 * 60 * 24 }
