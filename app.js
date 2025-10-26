@@ -11,7 +11,8 @@ const productsRouter = require('./routes/productsRouter')
 
 const path = require('path');
 const cookieParser = require('cookie-parser')
-const expressSession = require('express-session')
+const session = require('express-session')
+const MongoStore = require('connect-mongo');
 const flash = require('connect-flash')
 
 app.set('view engine', 'ejs')
@@ -19,11 +20,16 @@ app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(express.static(path.join(__dirname,'public')))
 app.use(cookieParser())
-app.use(expressSession({
+app.use(session({
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
-  secret: process.env.EXPRESS_SESSION_SECRET,
-}))
+  store: MongoStore.create({
+    mongoUrl: config.get('MONGODB_URI'),
+    collectionName: 'sessions'
+  }),
+  cookie: { maxAge: 1000 * 60 * 60 * 24 }
+}));
 app.use(flash())
 
 app.use('/', indexRouter)
