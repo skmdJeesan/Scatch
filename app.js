@@ -31,4 +31,7 @@ app.use('/owners', ownersRouter)
 app.use('/users', usersRouter)
 app.use('/products', productsRouter)
 
-app.listen(process.env.PORT)
+const port = process.env.PORT || 3000; // Always use the PORT env variable provided by Render
+app.listen(port, '0.0.0.0', () => { // Bind to 0.0.0.0 to accept connections from outside
+    console.log(`Server is running on port ${port}`);
+});
