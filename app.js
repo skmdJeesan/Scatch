@@ -13,6 +13,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser')
 const session = require('express-session')
 const MongoStore = require('connect-mongo');
+const config = require('config')
 const flash = require('connect-flash')
 
 app.set('view engine', 'ejs')
