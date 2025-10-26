@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const ownerModel = require('../models/owner-model');
+const userModel = require('../models/user-model');
 const bcrypt = require('bcrypt');
 const isloggedin = require('../middlewares/isLoggedin');
+const {generateToken} = require('../utils/generateToken')
 
 const SALT_ROUNDS = 10;
 
@@ -28,30 +30,21 @@ const SALT_ROUNDS = 10;
 // });
 
 // Login route (form should POST to this)
-router.post('/owners/login', async (req, res) => {
+router.post('/login', async (req, res) => {
   try {
-    const { email, password } = req.body;
-    const owner = await ownerModel.findOne({ email });
-    if (!owner) {
-      req.flash('error', 'Invalid credentials');
-      return res.redirect('/owners/login');
-    }
-
-    const match = await bcrypt.compare(password, owner.password);
-    if (!match) {
-      req.flash('error', 'Invalid credentials');
-      return res.redirect('/owners/login');
-    }
-
-    // set session
-    req.session.user = { id: owner._id, email: owner.email, role: 'owner' };
-    req.flash('success', 'Logged in');
-    return res.redirect('/owners/admin');
-  } catch (err) {
-    console.error(err);
-    req.flash('error', 'Server error');
-    return res.redirect('/owners/login');
-  }
+    let {email, password} = req.body
+    let owner = await userModel.findOne({email})
+    if(!owner) return res.status(401).send('user not found')
+    bcrypt.compare(password, owner.password, (err,result) => {
+      if(result){
+        let token = generateToken(owner)
+        res.cookie('token', token)
+        res.redirect('/owners/admin')
+      } else {
+        res.status(401).send('user not found')
+      }
+    })
+  } catch(err) { res.send(err.message)}
 });
 
 router.get('/admin', isloggedin, (req, res) => {

@@ -36,9 +36,9 @@
             </div>
         </div>
         <div class="w-[80%] flex flex-col gap-5 h-screen">
-            <div class="flex items-start gap-5">
+            <div class="flex items-start gap-5 flex-wrap">
                 <% products.forEach(function(product){ %>
-                    <div class="w-60 rounded-[10px]">
+                    <div class="w-56 rounded-[10px]">
                         <div class="w-full h-48 py-1 flex items-center justify-center bg-[<%= product.bgcolor %>]">
                             <img class="h-[9rem] object-cover" src="data:image/jpeg;base64,<%= product.image.toString('base64') %>" alt="">
                         </div>
@@ -58,7 +58,7 @@
                         </div>
                     </div>
                 <% }) %>
-                <div class="w-60">
+                <!-- <div class="w-56">
                     <div class="w-full h-48 py-1 flex items-center justify-center bg-zinc-600">
                         <img class="h-[9rem] object-cover" src="../public/images/1bag.png" alt="">
                     </div>
@@ -72,7 +72,7 @@
                         </a>
                     </div>
                 </div>
-                <div class="w-60">
+                <div class="w-56">
                     <div class="w-full h-48 py-1 flex items-center justify-center bg-zinc-600">
                         <img class="h-[9rem] object-cover" src="../public/images/2bag.png" alt="">
                     </div>
@@ -86,7 +86,7 @@
                         </a>
                     </div>
                 </div>
-                <div class="w-60">
+                <div class="w-56">
                     <div class="w-full h-48 py-1 flex items-center justify-center bg-zinc-600">
                         <img class="h-[9rem] object-cover" src="../public/images/4bag.png" alt="">
                     </div>
@@ -100,7 +100,7 @@
                         </a>
                     </div>
                 </div>
-                <div class="w-60">
+                <div class="w-56">
                     <div class="w-full h-48 py-1 flex items-center justify-center bg-zinc-600">
                         <img class="h-[9rem] object-cover" src="../public/images/6bag.png" alt="">
                     </div>
@@ -113,7 +113,7 @@
                             <i class="ri-add-line"></i>
                         </a>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
