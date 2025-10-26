@@ -74,6 +74,4 @@ router.post('/order', isloggedin, (req,res) => {
   res.send('ordered placed successfully🎉')
 })
 
-
-
 module.exports = router

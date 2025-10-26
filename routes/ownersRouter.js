@@ -46,7 +46,7 @@ router.post('/owners/login', async (req, res) => {
     // set session
     req.session.user = { id: owner._id, email: owner.email, role: 'owner' };
     req.flash('success', 'Logged in');
-    return res.redirect('/admin');
+    return res.redirect('/owners/admin');
   } catch (err) {
     console.error(err);
     req.flash('error', 'Server error');
