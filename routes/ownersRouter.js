@@ -1,21 +1,66 @@
-const express = require('express')
-const router = express.Router()
-const ownerModel = require('../models/owner-model')
-const isloggedin = require('../middlewares/isLoggedin')
+const express = require('express');
+const router = express.Router();
+const ownerModel = require('../models/owner-model');
+const bcrypt = require('bcrypt');
+const isloggedin = require('../middlewares/isLoggedin');
 
-if(process.env.NODE_ENV === 'development') {
-  router.post('/create', async (req,res) => {
-    let owners = await ownerModel.find()
-    if(owners.length > 0) res.status(504).send("you can't be owner!")
-    let {fullname, email, password} = req.body
-    let createdOwner = await ownerModel.create({fullname, email, password})
-    res.status(201).send(createdOwner)
-  })
-}
+const SALT_ROUNDS = 10;
 
-router.get('/admin', isloggedin, (req,res) => {
-  let success = req.flash("success")
-  res.render("createproducts", {success})
-})
+// Register (only one owner allowed)
+// router.post('/owners/create', async (req, res) => {
+//   try {
+//     const owners = await ownerModel.find();
+//     if (owners.length > 0) return res.status(403).send("you can't be owner!");
 
-module.exports = router
+//     const { email, password } = req.body;
+//     const hash = await bcrypt.hash(password, SALT_ROUNDS);
+//     const owner = await ownerModel.create({ email, password: hash });
+
+//     // set session so user is logged in
+//     req.session.user = { id: owner._id, email: owner.email, role: 'owner' };
+//     req.flash('success', "Owner created and logged in.");
+//     return res.redirect('/admin');
+//   } catch (err) {
+//     //console.error(err);
+//     req.flash('error', 'Server error');
+//     return res.redirect('/owners/login');
+//   }
+// });
+
+// Login route (form should POST to this)
+router.post('/owners/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const owner = await ownerModel.findOne({ email });
+    if (!owner) {
+      req.flash('error', 'Invalid credentials');
+      return res.redirect('/owners/login');
+    }
+
+    const match = await bcrypt.compare(password, owner.password);
+    if (!match) {
+      req.flash('error', 'Invalid credentials');
+      return res.redirect('/owners/login');
+    }
+
+    // set session
+    req.session.user = { id: owner._id, email: owner.email, role: 'owner' };
+    req.flash('success', 'Logged in');
+    return res.redirect('/admin');
+  } catch (err) {
+    console.error(err);
+    req.flash('error', 'Server error');
+    return res.redirect('/owners/login');
+  }
+});
+
+router.get('/admin', isloggedin, (req, res) => {
+  const success = req.flash("success");
+  res.render("createproducts", { success });
+});
+
+router.get('/login', (req, res) => {
+  res.render("owner-login", { loggedin: false });
+});
+
+module.exports = router;
